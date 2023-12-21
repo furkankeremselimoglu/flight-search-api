@@ -18,7 +18,7 @@ public class Flight {
     private long id;
     private String departureAirport;
     private String arrivalAirport;
-    private LocalDateTime departureTİme;
-    private LocalDateTime returnTime;
+    private LocalDateTime departureTime;
+    private LocalDateTime arrivalTime;
     private double price;
 }
