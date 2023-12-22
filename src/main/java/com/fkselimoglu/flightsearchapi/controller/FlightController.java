@@ -4,16 +4,17 @@ import com.fkselimoglu.flightsearchapi.entity.Flight;
 import com.fkselimoglu.flightsearchapi.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/flights")
 public class FlightController {
-
     @Autowired
     private FlightRepository flightRepository;
 
@@ -23,8 +24,13 @@ public class FlightController {
     }
 
     @GetMapping("/{id}")
-    public Flight getFlightById(@PathVariable Long id) {
-        return flightRepository.findById(id).orElse(null);
+    public ResponseEntity<?> getFlightById(@PathVariable Long id) {
+        Optional<Flight> flight = flightRepository.findById(id);
+        if (flight.isPresent()) {
+            return ResponseEntity.ok(flight.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Flight not found with id: " + id);
+        }
     }
 
     @PostMapping
@@ -45,7 +51,7 @@ public class FlightController {
             flight.setArrivalAirport(flightDetails.getArrivalAirport());
             flight.setDepartureTime(flightDetails.getDepartureTime());
             flight.setArrivalTime(flightDetails.getArrivalTime());
-            flight.setPrice(flight.getPrice());
+            flight.setPrice(flightDetails.getPrice());
 
             flightRepository.save(flight);
         }
@@ -58,6 +64,27 @@ public class FlightController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime) {
         return flightRepository.findByDepartureAirportAndArrivalAirportAndDepartureTime(
                 departureAirport, arrivalAirport, departureTime);
+    }
+
+    @GetMapping("/searchFlights")
+    public ResponseEntity<?> searchFlights(
+            @RequestParam String departureAirport,
+            @RequestParam String arrivalAirport,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime returnTime) {
+
+        List<Flight> departureFlights = flightRepository.findByDepartureAirportAndArrivalAirportAndDepartureTime(
+                departureAirport, arrivalAirport, departureTime);
+
+        if (returnTime == null) {
+            // One direction flight
+            return new ResponseEntity<>(departureFlights, HttpStatus.OK);
+        } else {
+            // Two direction flight
+            List<Flight> returnFlights = flightRepository.findByDepartureAirportAndArrivalAirportAndDepartureTime(
+                    arrivalAirport, departureAirport, returnTime);
+            return new ResponseEntity<>(new Object[]{departureFlights, returnFlights}, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/flightsByAirports")
