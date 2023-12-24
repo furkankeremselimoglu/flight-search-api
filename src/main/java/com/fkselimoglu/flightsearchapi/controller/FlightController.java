@@ -57,15 +57,6 @@ public class FlightController {
         }
     }
 
-    @GetMapping("/search")
-    public List<Flight> searchFlightsByAirportsAndTime(
-            @RequestParam String departureAirport,
-            @RequestParam String arrivalAirport,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime) {
-        return flightRepository.findByDepartureAirportAndArrivalAirportAndDepartureTime(
-                departureAirport, arrivalAirport, departureTime);
-    }
-
     @GetMapping("/searchFlights")
     public ResponseEntity<?> searchFlights(
             @RequestParam String departureAirport,
