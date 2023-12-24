@@ -44,7 +44,7 @@ This project is a robust Flight Search API that enables users to query, list, an
    ```
    
 2. **Access the Swagger UI:**
-   - Open your web browser and go to <a href="http://localhost:8080/swagger-ui.html" target="_blank">http://localhost:8080/swagger-ui.html</a>.
+   - Open your web browser and go to http://localhost:8080/swagger-ui.html.
    - You will be prompted for a username and password.
 
 ### Access Credentials
