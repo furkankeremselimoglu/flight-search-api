@@ -35,11 +35,11 @@ This project is a robust Flight Search API that enables users to query, list, an
 ### Running the Application
 
 1. **Start the Application:**
-   on Mac and Linux
+   - On Mac and Linux
    ```bash
    ./mvnw spring-boot:run
    ```
-   Or on Windows:
+   - On Windows:
    ```bash
    mvnw spring-boot:run
    ```
