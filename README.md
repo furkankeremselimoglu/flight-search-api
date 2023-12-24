@@ -35,15 +35,16 @@ This project is a robust Flight Search API that enables users to query, list, an
 ### Running the Application
 
 1. **Start the Application:**
+   on Mac and Linux
    ```bash
-   mvnw spring-boot:run
+   ./mvnw spring-boot:run
    ```
    Or on Windows:
    ```bash
    mvnw spring-boot:run
    ```
    
-2. **Access the Swagger UI:**
+3. **Access the Swagger UI:**
    - Open your web browser and go to http://localhost:8080/swagger-ui.html.
    - You will be prompted for a username and password.
 
